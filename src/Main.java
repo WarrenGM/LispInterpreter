@@ -1,9 +1,7 @@
-import java.util.Scanner;
-
 public class Main {
 
     public static void main(String args[]) {
-        SchemeREPL repl = new SchemeREPL();
+        REPL repl = new REPL();
     
         repl.loop();
     }

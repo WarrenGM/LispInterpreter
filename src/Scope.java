@@ -4,10 +4,10 @@ public class Scope {
     
     private Scope outerScope;
     
-    private Map<String, String> definitions;
+    private Map<String, Expression> definitions;
     
     public Scope() {
-        definitions = new HashMap<String, String>();
+        definitions = new HashMap<String, Expression>();
     }
     
     public Scope(Scope outerScope) {
@@ -15,18 +15,22 @@ public class Scope {
         this.outerScope = outerScope;
     }
     
-    public String bind(String var, String value) {
+    public Expression bind(String var, Expression value) {
+        if (definitions.containsKey(var)) {
+            return null;//var + " has already been declared in this scope.";
+        }
+    
         definitions.put(var, value);
         return value;
     }
     
-    public String lookUp(String var) {
+    public Expression lookUp(String var) {
         if (definitions.containsKey(var)) {
             return definitions.get(var);
         } else if (outerScope != null) {
            return outerScope.lookUp(var);
         } else {
-            return var + " not found"; // TODO Throw exception 
+            return null;// var + " not found"; // TODO Throw exception 
         }
     }
     
