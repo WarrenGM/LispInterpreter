@@ -1,0 +1,10 @@
+-Comments
+-Vectors
+-Characters, Strings, ...
+-Non-integral numbers
+-More efficient numerical operations
+-Tail call optimization
+-Importing files
+-Errors
+-Let statement
+-Standard procedures

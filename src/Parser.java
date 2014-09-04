@@ -71,8 +71,8 @@ public class Parser {
         
         // INTEGER
         try {
-            Integer.parseInt(input);
-            return new Number.Int(input);
+            int i = Integer.parseInt(input);
+            return new Num(i);
         } catch (Exception e) {}
         
         if (input.toLowerCase().equals("#t") || input.toLowerCase().equals("#f")) {

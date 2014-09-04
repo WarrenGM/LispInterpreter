@@ -45,11 +45,13 @@ public enum BuiltIn {
         public String keyword() { return "+"; }
         
         public Expression evaluate(List args) {
-            Number result = ((Number)args.car());
+            Num result = ((Num)args.car());
+            
             while (!(args.cdr() instanceof List.Nil)) {
                 args = args.cdr();
-                result = result.plus((Number)args.car());
+                result = result.plus((Num)args.car());
             }
+            
             return result;
         }
     }),
@@ -58,10 +60,10 @@ public enum BuiltIn {
         public String keyword() { return "-"; }
         
         public Expression evaluate(List args) {
-            Number result = ((Number)args.car());
+            Num result = ((Num)args.car());
             while (!(args.cdr() instanceof List.Nil)) {
                 args = args.cdr();
-                result = result.minus((Number)args.car());
+                result = result.minus((Num)args.car());
             }
             return result;
         }
@@ -71,10 +73,10 @@ public enum BuiltIn {
         public String keyword() { return "*"; }
         
         public Expression evaluate(List args) {
-            Number result = ((Number)args.car());
+            Num result = ((Num)args.car());
             while (!(args.cdr() instanceof List.Nil)) {
                 args = args.cdr();
-                result = result.times((Number)args.car());
+                result = result.times((Num)args.car());
             }
             return result;
         }
@@ -85,10 +87,10 @@ public enum BuiltIn {
         
         public Expression evaluate(List args) {
             
-            Number result = ((Number)args.car());
+            Num result = ((Num)args.car());
             while (!(args.cdr() instanceof List.Nil)) {
                 args = args.cdr();
-                result = result.divide((Number)args.car());
+                result = result.divide((Num)args.car());
             }
             return result;
         }
@@ -102,7 +104,7 @@ public enum BuiltIn {
             
             while (!(args.cdr() instanceof List.Nil)) {
                 result = result 
-                        && ((Number)args.car()).lessThan((Number)args.cdr().car());
+                        && ((Num)args.car()).lessThan((Num)args.cdr().car());
                 args = args.cdr();
             }
             
@@ -117,7 +119,7 @@ public enum BuiltIn {
             int leftOperand = parseInt(args.car().toString()),
                 rightOperand = parseInt(args.cdr().car().toString());
                     
-            return new Number.Bool(leftOperand < rightOperand);
+            return new Atom.Bool(leftOperand < rightOperand);
         }
     }),
     
@@ -128,7 +130,7 @@ public enum BuiltIn {
             int leftOperand = parseInt(args.car().toString()),
                 rightOperand = parseInt(args.cdr().car().toString());
                     
-            return new Number.Bool(leftOperand > rightOperand);
+            return new Atom.Bool(leftOperand > rightOperand);
         }
     }),
     
@@ -139,7 +141,7 @@ public enum BuiltIn {
             int leftOperand = parseInt(args.car().toString()),
                 rightOperand = parseInt(args.cdr().car().toString());
                     
-            return new Number.Bool(leftOperand == rightOperand);
+            return new Atom.Bool(leftOperand == rightOperand);
         }
     });
     

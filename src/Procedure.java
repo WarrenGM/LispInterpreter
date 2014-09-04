@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Procedure extends Expression {
 
     private List params;
@@ -15,10 +13,6 @@ public class Procedure extends Expression {
         this.body = body;
         functionScope = scope;
     
-    }
-
-    public Type getType() {
-        return Type.PROCEDURE;
     }
     
     /**
