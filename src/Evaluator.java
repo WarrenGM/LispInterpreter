@@ -70,6 +70,17 @@ public class Evaluator {
             
         } else if (l.cdr() instanceof List.Nil) {
             return scope.lookUp(l.car().toString());
+        } else if (l.car().toString().equals("let")) {
+            List declarations = (List)l.cdr().car();
+            Scope local = new Scope(scope);
+            
+            while (!(declarations instanceof List.Nil)) {
+                List car = (List)declarations.car();
+                local.bind(car.car().toString(), eval(car.cdr().car(), scope));
+                declarations = declarations.cdr();
+            }
+            
+            return eval(l.cdr().cdr().car(), local);
         }
                 
         Procedure proc = (Procedure)scope.lookUp(l.car().toString());
