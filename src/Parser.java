@@ -83,6 +83,13 @@ public class Parser {
             return new Num(numerator, denominator, Num.Type.REAL);
         } catch (Exception e) {}
         
+        if (input.matches("^\\d+/\\d+$")) {
+            int index = input.indexOf('/');
+            int numerator = Integer.parseInt(input.substring(0, index));
+            int denominator = Integer.parseInt(input.substring(index + 1));
+            return new Num(numerator, denominator, Num.Type.RATIONAL);
+        }
+        
         if (input.toLowerCase().equals("#t") || input.toLowerCase().equals("#f")) {
             return new Atom.Bool(input);
         }

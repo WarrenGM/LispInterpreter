@@ -7,11 +7,11 @@ public class Scope {
     private Map<String, Expression> definitions;
     
     public Scope() {
-        definitions = new HashMap<String, Expression>();
+        this(null);
     }
     
     public Scope(Scope outerScope) {
-        this();
+        definitions = new HashMap<String, Expression>();
         this.outerScope = outerScope;
     }
     

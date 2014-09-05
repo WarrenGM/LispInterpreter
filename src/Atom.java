@@ -17,7 +17,7 @@ public abstract class Atom extends Expression {
         }
 
         public String toString() {
-            return Boolean.toString(value);
+            return value ? "#t" : "#f";
         }
         
         public boolean getValue() {
