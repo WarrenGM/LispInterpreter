@@ -75,6 +75,14 @@ public class Parser {
             return new Num(i);
         } catch (Exception e) {}
         
+        try {
+            Double.parseDouble(input);
+            
+            int denominator = (int)Math.pow(10, input.length() - input.indexOf('.') - 1);
+            int numerator = Integer.parseInt(input.replace(".", ""));
+            return new Num(numerator, denominator, Num.Type.REAL);
+        } catch (Exception e) {}
+        
         if (input.toLowerCase().equals("#t") || input.toLowerCase().equals("#f")) {
             return new Atom.Bool(input);
         }

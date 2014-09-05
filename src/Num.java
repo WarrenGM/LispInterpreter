@@ -5,27 +5,10 @@ public class Num extends Atom {
      */
     private int realNum, realDenom = 1, imaginNum, imaginDenom = 1;
 
-    private Type type = Type.INTEGER;
+    private Type typeOfNum = Type.INTEGER;
 
-    public enum Type {
+    public enum Type implements Comparable<Num.Type> {
         INTEGER, RATIONAL, REAL, COMPLEX;
-
-        /**
-         *  Returns whether or not this <= t in the ordering
-         *  INTEGER < RATIONAL < REAL < COMPLEX.
-         */
-        public boolean isSubtypeOf(Type t) {
-            switch (this) {
-                case RATIONAL:
-                    return t != INTEGER;
-                case REAL: 
-                    return t == COMPLEX || t == REAL;
-                case COMPLEX:
-                    return t == COMPLEX;
-                default: // INTEGER
-                    return true;
-            }
-        }
     }
     
     public Num(int realNum) {
@@ -40,7 +23,7 @@ public class Num extends Atom {
     public Num(int realNum, int realDenom, Type t) {
         this.realNum = realNum;
         this.realDenom = realDenom;
-        type = t;
+        typeOfNum = t;
     }
     
 
@@ -60,7 +43,7 @@ public class Num extends Atom {
                 + x.imaginaryNumerator() * imaginDenom;
         iDenom = imaginDenom * x.imaginaryDenominator();
 
-        Type t = this.type.isSubtypeOf(x.getType()) ? x.getType() : type;
+        Type t = typeOfNum.compareTo(x.getType()) < 0? x.getType() : typeOfNum;
 
         return new Num(rNum, rDenom, iNum, iDenom, t);
     }
@@ -75,7 +58,7 @@ public class Num extends Atom {
                 - x.imaginaryNumerator() * imaginDenom;
         iDenom = imaginDenom * x.imaginaryDenominator();
 
-        Type t = this.type.isSubtypeOf(x.getType()) ? x.getType() : type;
+        Type t = getSuperType(x);
         
         return new Num(rNum, rDenom, iNum, iDenom, t);
     }
@@ -86,7 +69,7 @@ public class Num extends Atom {
         rNum = realNum * x.realNumerator();
         rDenom = realDenom * x.realDenominator();
         
-        Type t = this.type.isSubtypeOf(x.getType()) ? x.getType() : type;
+        Type t = getSuperType(x);
         
         if (rDenom != 1 && rNum % rDenom == 0) {
             rNum /= rDenom;
@@ -113,7 +96,7 @@ public class Num extends Atom {
         
         // TODO imaginary part.
 
-        Type t = this.type.isSubtypeOf(x.getType()) ? x.getType() : type;
+        Type t = getSuperType(x);
         
         if (rDenom != 1 && t == Type.INTEGER) {
             t = Type.RATIONAL;
@@ -123,7 +106,7 @@ public class Num extends Atom {
     }
     
     public boolean lessThan(Num x) {
-        if (type == Type.COMPLEX || x.getType() == Type.COMPLEX) {
+        if (typeOfNum == Type.COMPLEX || x.getType() == Type.COMPLEX) {
             // Throw error;
         }
         
@@ -131,6 +114,39 @@ public class Num extends Atom {
                xValue = (x.realNumerator() * 1.0) / x.realDenominator();
 
         return thisValue < xValue;
+    }
+    
+    public boolean lessThanOrEqualTo(Num x) {
+        if (typeOfNum == Type.COMPLEX || x.getType() == Type.COMPLEX) {
+            // Throw error;
+        }
+        
+        double thisValue = (realNum * 1.0) / realDenom,
+               xValue = (x.realNumerator() * 1.0) / x.realDenominator();
+
+        return thisValue <= xValue;
+    }
+    
+    public boolean greaterThan(Num x) {
+        if (typeOfNum == Type.COMPLEX || x.getType() == Type.COMPLEX) {
+            // Throw error;
+        }
+        
+        double thisValue = (realNum * 1.0) / realDenom,
+               xValue = (x.realNumerator() * 1.0) / x.realDenominator();
+
+        return thisValue > xValue;
+    }
+    
+    public boolean greaterThanOrEqualTo(Num x) {
+        if (typeOfNum == Type.COMPLEX || x.getType() == Type.COMPLEX) {
+            // Throw error;
+        }
+        
+        double thisValue = (realNum * 1.0) / realDenom,
+               xValue = (x.realNumerator() * 1.0) / x.realDenominator();
+
+        return thisValue >= xValue;
     }
 
     public int realNumerator() {
@@ -151,12 +167,12 @@ public class Num extends Atom {
     }
     
     public Type getType() {
-        return type;
+        return typeOfNum;
     }
     
     public String toString() {
                 
-        switch (this.type) {
+        switch (this.typeOfNum) {
              case RATIONAL:
                  return realNum + "/" + realDenom;
              case REAL: 
@@ -177,5 +193,15 @@ public class Num extends Atom {
                  return Integer.toString(realNum);
         }
     }
-
+    
+    /**
+     * Returns the "SuperType" of this and the given number x. For example if 
+     * either this or the given Num is of type RATIONAL and the other is of type
+     * REAL, then this method will return REAL since the reals is a superset of
+     * the rationals.
+     */
+    private Type getSuperType(Num x) {
+        return typeOfNum.compareTo(x.getType()) < 0? x.getType() : typeOfNum;
+    }
+    
 }
